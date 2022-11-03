@@ -60,6 +60,13 @@ const chatController = {
               path: "latestMessage.sender",
               select: "name pic email",
             });
+            var map = results.map((item)=>{
+              return {
+                "alt" : item.users[0]._id === req.user._id ? item.users[1].name : item.users[0].name,
+                "title": item.chatName
+              }
+            })
+            console.log(map)
             res.status(200).send(results);
           });
         }catch(error){

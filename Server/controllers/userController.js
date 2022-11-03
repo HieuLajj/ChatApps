@@ -28,6 +28,7 @@ const userController = {
     //SIGN IN
     userSignIn: async(req,res)=>{
       const { email, password } = req.body;
+      console.log(email +"ok" + password);
       const user = await User.findOne({ email });
       if (!user){
         return res.json({
