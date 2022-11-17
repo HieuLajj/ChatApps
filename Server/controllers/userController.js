@@ -145,10 +145,10 @@ const userController = {
     //GET ALL AUTHORS
     getAllAuthors: async(req,res)=>{
        try{
-           const authors = await User.find();
-           res.status(200).json(authors);
+          const authors = await User.find();
+          res.status(200).json(authors);
        }catch(err){
-           res.status(500).json(err);
+          res.status(500).json(err);
        }
     },
 
@@ -161,9 +161,13 @@ const userController = {
           ],
           }
         : {};
-
-      const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-      res.send(users);
+      try {
+        console.log("tim keim tahnh vien"+req.query.search)
+        const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+        res.send(users);    
+      } catch (error) {
+        res.status(500).json(err);
+      }
     }
 }
 

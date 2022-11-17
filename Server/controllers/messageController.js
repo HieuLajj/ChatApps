@@ -37,7 +37,21 @@ const messageController = {
             const messages = await Message.find({ chat: req.params.chatId })
               .populate("sender", "name pic email")
               .populate("chat");
-            res.json(messages);
+            var messagescv = messages.map((item)=>{
+                let idme =  req.user._id.toString() == item.sender._id.toString() ? 1 : 0;
+                
+                return {
+                  _id: item._id,
+                  text: item.content,
+                  createdAt: item.createdAt,
+                  user: {
+                    _id: idme,
+                    name: item.sender.name,
+                    avatar: 'https://placeimg.com/140/140/any',
+                  },
+              }
+            })
+            res.json(messagescv.reverse());
           } catch (error) {
             res.status(400);
             console.log(error);

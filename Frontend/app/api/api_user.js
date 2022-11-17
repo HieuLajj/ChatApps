@@ -13,8 +13,24 @@ const loginUser = async(inputs) => {
      } catch (error) {
          console.log(error.message);    
      }
- }
+}
+
+const searchUser = async(token, text, myCallback) => {
+    const config = {
+        headers: {
+          Authorization: `jwt ${token}`
+        },
+    };
+
+    try {
+        const res = await client.get(`/laihieu/user/searchuser?search=${text}`,config); 
+        myCallback(res.data)  
+    } catch (error) {
+         console.log(error.message);    
+    }
+}
 export {
     loginUser,
+    searchUser
 }
  

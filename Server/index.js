@@ -13,6 +13,7 @@ app.use(morgan("common"));
 const userRoute = require("./routes/user_route");
 const chatRoute = require("./routes/chatRoutes")
 const messageRoute = require("./routes/messageRoutes")
+const postRoute = require("./routes/postRoutes")
 dotenv.config();
 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/laihieu/user",userRoute);
 app.use("/laihieu/chat",chatRoute);
 app.use("/laihieu/message",messageRoute);
+app.use("/laihieu/post",postRoute)
 
 app.get('/',(req,res)=>{
     res.json("trangchu")
@@ -35,8 +37,9 @@ if(io){
     console.log("ok")
 }
 io.on("connection",(socket)=>{
+    let roomid = "";
     console.log('connected to socket.io'+socket.id)
-    socket.on('data',(data)=>{
+    socket.on('message recieved',(data)=>{
         let obj = JSON.parse(data);
         let dulieusauchuyendoi ={
             _id: uuid(),
@@ -48,7 +51,13 @@ io.on("connection",(socket)=>{
                 avatar: 'https://placeimg.com/140/140/any',
             }
         }
-
-        socket.emit("message recieved",JSON.stringify(dulieusauchuyendoi))
+        
+        socket.broadcast.to(roomid).emit("message recieved",JSON.stringify(dulieusauchuyendoi))
     })
+    socket.on("join chat", (room) => {
+        roomid="";
+        socket.join(room);
+        roomid = room;
+        console.log(roomid+"User Joined Room: " + room);
+    });
 })

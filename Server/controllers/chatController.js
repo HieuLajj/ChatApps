@@ -2,6 +2,7 @@ const { response } = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const Chat = require("../models/chatModel");
+const user = require("../models/user");
 const chatController = {
   
   accessChat : async (req,res)=>{
@@ -61,13 +62,23 @@ const chatController = {
               select: "name pic email",
             });
             var map = results.map((item)=>{
+              console.log(item.users[1].name +"--"+item.users[0].name+"--"+req.user.name)
+              let useryour =  item.users[0].name == req.user.name ? item.users[1] : item.users[0]
+              let message = item?.latestMessage
+              let time =  message?.updatedAt;
+              let timecv = time?.toLocaleString("en-US");
+            
               return {
-                "alt" : item.users[0]._id === req.user._id ? item.users[1].name : item.users[0].name,
-                "title": item.chatName
+                id: item._id,
+                idUser: useryour._id,
+                userName: useryour.name,
+                userImg: useryour.avatar,
+                messageTime: timecv,
+                messageText: message?.content
               }
             })
-            console.log(map)
-            res.status(200).send(results);
+            //res.status(200).send(results);
+            res.status(200).send(map);
           });
         }catch(error){
           res.status(400);

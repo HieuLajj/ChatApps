@@ -11,7 +11,7 @@ import FormHeader from './FormHeader';
 import FormSelectorBtn from './FormSelectorBtn';
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
-import {log} from "../api/api_user"
+import {loginUser} from "../api/api_user"
 
 const { width } = Dimensions.get('window');
 

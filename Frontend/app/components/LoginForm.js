@@ -41,9 +41,7 @@ const LoginForm = ({navigation}) => {
       :
       dispatch(updateInfomation(data.user.id,data.user.email,data.user.name,data.user.phone,data.token,data.user.avg,'https://sieupet.com/sites/default/files/pictures/images/1-1473150685951-5.jpg'))
       console.log(JSON.stringify(data)+"goi api thanh cong")
-      console.log(data.user.id);
-      console.log("-------------------------")
-      console.log(data.token);
+      navigation.navigate('MyTabs');
     })
   }
 
@@ -51,7 +49,6 @@ const LoginForm = ({navigation}) => {
    // if (isValidForm()) {
         //console.log(userInfo)
         await loginAPI(userInfo)
-        navigation.navigate('MyTabs');
     //   try {
     //     const res = await client.post('/sign-in', { ...userInfo });
 
