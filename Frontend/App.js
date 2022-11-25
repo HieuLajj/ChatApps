@@ -7,33 +7,20 @@ import Global from './app/components/Global';
 import Profile from './app/components/Profile';
 import ProfileSearch from './app/components/ProfileSearch';
 import AddPostScreen from './app/components/AddPostScreen';
+import EditProfileScreen from './app/components/EditProfileScreen';
 import {Provider} from 'react-redux'
 import {store} from './app/redux/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Icon from "react-native-vector-icons/FontAwesome";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export default function App() {
   function MyTabs({navigation}) {
     return (
       <Tab.Navigator>
-        
-        <Tab.Screen 
-          name="Home" 
-          component={Home}
-          options={{
-            headerShown: false 
-          }
-          }
-        />
-        <Tab.Screen name="Profile" component={Profile}
-        options={{
-          headerShown: false 
-        }}
-
-        />
         <Tab.Screen 
           name="Private Social" 
           component={Global}
@@ -59,7 +46,38 @@ export default function App() {
                 />
               </View>
             ),
+            tabBarIcon: (tabInfo) => {
+              return(
+                <Icon name="group" size={25} 
+                color={ tabInfo.focused ? "#2e64e5" : "#8e8e93"} />
+              );
+            }
           }}    
+        />
+        <Tab.Screen 
+          name="Home" 
+          component={Home}
+          options={{
+            headerShown: false,
+            tabBarIcon: (tabInfo) => {
+              return(
+                <Icon name="wechat" size={25} 
+                color={ tabInfo.focused ? "#2e64e5" : "#8e8e93"} />
+              );
+            } 
+          }
+          }
+        />
+        <Tab.Screen name="Profile" component={Profile}
+        options={{
+          headerShown: false,
+          tabBarIcon: (tabInfo) => {
+            return(
+              <Icon name="address-book" size={25} 
+              color={ tabInfo.focused ? "#2e64e5" : "#8e8e93"} />
+            );
+          } 
+        }}
         />
       </Tab.Navigator>
     );
@@ -73,6 +91,7 @@ export default function App() {
           <Stack.Screen name="Chat" component={Chat} />
           <Stack.Screen name="ProfileSearch" component={ProfileSearch}/>
           <Stack.Screen name="AddPost" component={AddPostScreen}/>
+          <Stack.Screen name="EditProfileScreen" component={EditProfileScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

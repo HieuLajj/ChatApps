@@ -1,8 +1,130 @@
-import { StyleSheet, View,Text } from 'react-native';
-export default function Profile() {
+import React from 'react';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  Avatar,
+  Title,
+  Caption,
+  Text,
+  TouchableRipple,
+} from 'react-native-paper';
+import {useDispatch,useSelector} from 'react-redux'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+export default function Profile({navigation}) {
+  const info = useSelector((state)=>state.personalInfo)
   return (
-    <View>
-        <Text>Profile</Text>
+    <SafeAreaView style={styles.container}>
+
+    <View style={styles.userInfoSection}>
+      <View style={{flexDirection: 'row', marginTop: 15}}>
+        <Avatar.Image 
+          source={{
+            uri: info.avatar,
+          }}
+          size={80}
+        />
+        <View style={{marginLeft: 20}}>
+          <Title style={[styles.title, {
+            marginTop:15,
+            marginBottom: 5,
+          }]}>{info.name}</Title>
+        </View>
+      </View>
     </View>
+
+    <View style={styles.userInfoSection}>
+      <View style={styles.row}>
+        <Icon name="phone" color="#777777" size={20}/>
+        <Text style={{color:"#777777", marginLeft: 20}}>{info.phone}</Text>
+      </View>
+      <View style={styles.row}>
+        <Icon name="email" color="#777777" size={20}/>
+        <Text style={{color:"#777777", marginLeft: 20}}>{info.email}</Text>
+      </View>
+    </View>
+
+    <View style={styles.infoBoxWrapper}>
+        <View style={[styles.infoBox, {
+          borderRightColor: '#dddddd',
+          borderRightWidth: 1
+        }]}>
+          <Title>12000</Title>
+          <Caption>Flower</Caption>
+        </View>
+        <View style={styles.infoBox}>
+          <Title>12</Title>
+          <Caption>Flowing</Caption>
+        </View>
+    </View>
+
+    <View style={styles.menuWrapper}>
+      <TouchableRipple onPress={() => {}}>
+        <View style={styles.menuItem}>
+          <Icon name="account-check-outline" color="#2e64e5" size={25}/>
+          <Text style={styles.menuItemText}>Post</Text>
+        </View>
+      </TouchableRipple>
+      <TouchableRipple
+        onPress={()=>{
+          navigation.navigate('EditProfileScreen')
+        }} 
+      
+      >
+        <View style={styles.menuItem}>
+          <Icon name="account-settings" color="#2e64e5" size={25}/>
+          <Text style={styles.menuItemText}>Settings</Text>
+        </View>
+      </TouchableRipple>
+    </View>
+  </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  userInfoSection: {
+    paddingHorizontal: 30,
+    marginBottom: 25,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  caption: {
+    fontSize: 14,
+    lineHeight: 14,
+    fontWeight: '500',
+  },
+  row: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  infoBoxWrapper: {
+    borderBottomColor: '#dddddd',
+    borderBottomWidth: 1,
+    borderTopColor: '#dddddd',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    height: 100,
+  },
+  infoBox: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuWrapper: {
+    marginTop: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+  },
+  menuItemText: {
+    color: '#777777',
+    marginLeft: 20,
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 26,
+  },
+});

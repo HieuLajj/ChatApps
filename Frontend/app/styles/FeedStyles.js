@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-
+import { Dimensions } from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 export const Container = styled.View`
   flex: 1;
   align-items: center;
@@ -9,7 +11,7 @@ export const Container = styled.View`
 
 export const Card = styled.View`
     background-color: #f8f8f8;
-    width: 100%;
+    width: ${windowWidth-20};
     margin-bottom: 20px;
     border-radius: 10px;
 `;

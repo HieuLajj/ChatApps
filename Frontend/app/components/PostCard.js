@@ -32,7 +32,10 @@ const PostCard = ({item}) => {
             </UserInfoText>
         </UserInfo>
         <PostText>{item.post}</PostText>
-        {item.postImg != "none" ? <PostImg source={item.postImg}/>:
+        {item.postImg != "none" ? <PostImg 
+        //source={item.postImg}
+        source={{uri:  item.postImg}}
+        />:
         <Divider/>
         }
         {/* <PostImg source={require('../../assets/favicon.png')}/>

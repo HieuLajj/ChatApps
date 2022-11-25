@@ -1,4 +1,6 @@
-import { View, Text, Button, StyleSheet, FlatList, Image, StatusBar ,TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList, Image, StatusBar ,TouchableOpacity,
+Dimensions
+} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   Container,
@@ -44,6 +46,7 @@ export default function Home({navigation}) {
   const [searchText,setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const info = useSelector((state)=>state.personalInfo)
+  const windowWidth = Dimensions.get('window').width;
   useEffect(() => {
     setLoading(true);
     fetchChats(info.token,(data)=>{
@@ -85,9 +88,11 @@ export default function Home({navigation}) {
                             },
                             shadowOpacity: 0.3,
                             shadowRadius:20,
-                            width:350                       
+                            width: windowWidth*0.91                    
                             }}
-                onPress={()=>{navigation.navigate('ProfileSearch',{item: item})} } 
+                onPress={()=>{
+                  navigation.navigate('ProfileSearch',{item: item})
+                }} 
             >
               <Image source={{uri:  item.avatar}}
                     style={{
