@@ -32,7 +32,12 @@ router.get("/",userController.getAllAuthors);
 
 // update profile
 router.post('/update',isAuth,userController.updateProfileMain);
-module.exports = router;
 
 // search user
 router.get("/searchuser",isAuth, userController.allUsers);
+
+//follow
+router.put('/follow/:id',isAuth,userController.follow);
+//unfollow
+router.put('/unfollow/:id',isAuth,userController.unfollow);
+module.exports = router;

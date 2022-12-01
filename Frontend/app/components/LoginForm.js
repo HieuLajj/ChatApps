@@ -37,9 +37,9 @@ const LoginForm = ({navigation}) => {
   const loginAPI = async(inputs) =>{
     loginUser(inputs).then((data)=>{
       data.user.avatar?
-      dispatch(updateInfomation(data.user.id,data.user.email,data.user.name,data.user.phone,data.token,data.user.avg,data.user.avatar))
+      dispatch(updateInfomation(data.user.id,data.user.email,data.user.name,data.user.phone,data.token,data.user.avg,data.user.avatar,data.user.followers, data.user.followins))
       :
-      dispatch(updateInfomation(data.user.id,data.user.email,data.user.name,data.user.phone,data.token,data.user.avg,'https://sieupet.com/sites/default/files/pictures/images/1-1473150685951-5.jpg'))
+      dispatch(updateInfomation(data.user.id,data.user.email,data.user.name,data.user.phone,data.token,data.user.avg,'https://sieupet.com/sites/default/files/pictures/images/1-1473150685951-5.jpg',data.user.followers, data.user.followins))
       console.log(JSON.stringify(data)+"goi api thanh cong")
       navigation.navigate('MyTabs');
     })

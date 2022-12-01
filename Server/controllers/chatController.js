@@ -85,6 +85,17 @@ const chatController = {
           throw new Error(error.message);
         }
     },
+    fetchoneChats : async (req,res)=>{
+      const { friendId } = req.body;
+      try{
+        let exp = await Chat.find({ users: { $elemMatch: { $eq: req.user._id },
+          $elemMatch: { $eq: friendId}
+        }}) 
+          res.json(exp);
+      }catch(error){
+        console.log(error)
+      }
+  },
     // createGroupChat  : async (req,res)=>{
     //   if (!req.body.users || !req.body.name) {
     //     return res.status(400).send({ message: "Please Fill all the feilds" });

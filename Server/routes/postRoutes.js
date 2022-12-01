@@ -18,4 +18,5 @@ const uploads = multer({ storage, fileFilter });
 router.post('/addPost',isAuth, uploads.single('imgPost'),postController.addPost);
 
 router.get('/allPost', isAuth, postController.allPost);
+router.post('/allPostaUser', isAuth, postController.allPostAUser);
 module.exports = router;                                                                     

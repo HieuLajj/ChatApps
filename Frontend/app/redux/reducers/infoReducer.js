@@ -12,6 +12,8 @@ const initialState = {
     token: "",
     avg: "",
     avatar: "",
+    followers: [],
+    followins: []
 }
 export default function actionForReducer(state = initialState, payload){
     switch(payload.type){
@@ -25,6 +27,8 @@ export default function actionForReducer(state = initialState, payload){
                 token: payload.token,
                 avg:   payload.avg,
                 avatar:payload.avatar,
+                followers: payload.followers,
+                followins: payload.followins
             }
         default:
             return state

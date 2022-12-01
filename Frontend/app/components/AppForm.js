@@ -34,11 +34,11 @@ export default function AppForm({ navigation }) {
   });
   const loginColorInterpolate = animation.interpolate({
     inputRange: [0, width],
-    outputRange: ['rgba(27,27,51,1)', 'rgba(27,27,51,0.4)'],
+    outputRange: ['rgba(46,100,229,1)', 'rgba(46,100,229,0.4)'],
   });
   const signupColorInterpolate = animation.interpolate({
     inputRange: [0, width],
-    outputRange: ['rgba(27,27,51,0.4)', 'rgba(27,27,51,1)'],
+    outputRange: ['rgba(46,100,229,0.4)', 'rgba(46,100,229,1)'],
   });
 
   return (
@@ -46,8 +46,8 @@ export default function AppForm({ navigation }) {
       <View style={{ height: 80 }}>
         <FormHeader
           leftHeading='Welcome '
-          rightHeading='Back'
-          subHeading='YouTube Task Manager'
+          rightHeading='Social'
+          subHeading='Social network for fools'
           rightHeaderOpacity={rightHeaderOpacity}
           leftHeaderTranslateX={leftHeaderTranslateX}
           rightHeaderTranslateY={rightHeaderTranslateY}

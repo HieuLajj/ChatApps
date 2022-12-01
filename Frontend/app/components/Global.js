@@ -67,7 +67,7 @@ export default function Global({navigation}) {
        <FlatList
         data={post}
         renderItem={({item})=>
-            <PostCard item={item}/>
+            <PostCard item={item} navigation = {navigation}/>
         }
         keyExtractor = {item => item.id}
         showsVerticalScrollIndicator= {false}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {
   Avatar,
   Title,
@@ -7,8 +7,48 @@ import {
   Text,
   TouchableRipple,
 } from 'react-native-paper';
+import PostCard2 from './PostCard2';
 import {useDispatch,useSelector} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Container} from '../styles/FeedStyles'
+const Posts = [
+  {
+    id: '1',
+    userName: 'Jenny Doe',
+    userImg: require('../../assets/icon.png'),
+    postTime: '4 mins ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../../assets/favicon.png'),
+    liked: true,
+    likes: '14',
+    comments: '5',
+  },
+  {
+    id: '2',
+    userName: 'John Doe',
+    userImg: require('../../assets/icon.png'),
+    postTime: '2 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: 'none',
+    liked: false,
+    likes: '8',
+    comments: '0',
+  },
+  {
+    id: '3',
+    userName: 'Ken William',
+    userImg:require('../../assets/icon.png'),
+    postTime: '1 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../../assets/favicon.png'),
+    liked: true,
+    likes: '1',
+    comments: '0',
+  },
+];
 export default function Profile({navigation}) {
   const info = useSelector((state)=>state.personalInfo)
   return (
@@ -47,22 +87,16 @@ export default function Profile({navigation}) {
           borderRightColor: '#dddddd',
           borderRightWidth: 1
         }]}>
-          <Title>12000</Title>
+          <Title>{info.followers.length}</Title>
           <Caption>Flower</Caption>
         </View>
         <View style={styles.infoBox}>
-          <Title>12</Title>
+          <Title>{info.followins.length}</Title>
           <Caption>Flowing</Caption>
         </View>
     </View>
 
     <View style={styles.menuWrapper}>
-      <TouchableRipple onPress={() => {}}>
-        <View style={styles.menuItem}>
-          <Icon name="account-check-outline" color="#2e64e5" size={25}/>
-          <Text style={styles.menuItemText}>Post</Text>
-        </View>
-      </TouchableRipple>
       <TouchableRipple
         onPress={()=>{
           navigation.navigate('EditProfileScreen')
@@ -74,7 +108,21 @@ export default function Profile({navigation}) {
           <Text style={styles.menuItemText}>Settings</Text>
         </View>
       </TouchableRipple>
+      <View style={styles.menuItem}>
+        <Icon name="account-check-outline" color="#000000" size={25}/>
+        <Text style={styles.menuItemText}>Post</Text>
+      </View>
     </View>
+    <Container>
+      <FlatList
+        data={Posts}
+        renderItem={({item})=>
+          <PostCard2 item={item}/>
+        }
+        keyExtractor = {item => item.id}
+        showsVerticalScrollIndicator= {false}
+      />
+    </Container>
   </SafeAreaView>
   );
 }

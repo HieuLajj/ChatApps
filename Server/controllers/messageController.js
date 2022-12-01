@@ -39,6 +39,7 @@ const messageController = {
               .populate("chat");
             var messagescv = messages.map((item)=>{
                 let idme =  req.user._id.toString() == item.sender._id.toString() ? 1 : 0;
+                console.log(item+"okae");
                 
                 return {
                   _id: item._id,
@@ -47,7 +48,7 @@ const messageController = {
                   user: {
                     _id: idme,
                     name: item.sender.name,
-                    avatar: 'https://placeimg.com/140/140/any',
+                    avatar: req.user.avatar ? req.user.avatar : 'https://placeimg.com/140/140/any',
                   },
               }
             })

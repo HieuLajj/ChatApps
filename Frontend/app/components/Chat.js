@@ -26,48 +26,6 @@ export default function Chat(props) {
         GiftedChat.append(previousMessages, messages2),
       );
       })
-      // setMessages([
-      //   {
-      //     _id: "Fawefjokawehf",
-      //     text: 'Hello developer',
-      //     createdAt: new Date(),
-      //     user: {
-      //       _id: 2,
-      //       name: 'React Native',
-      //       avatar: 'https://placeimg.com/140/140/any',
-      //     },
-      //   },
-      //   {
-      //     _id: "fahwehyfawjh",
-      //     text: 'Hellogrr world',
-      //     createdAt: new Date(),
-      //     user: {
-      //       _id: 1,
-      //       name: 'React Native',
-      //       avatar: 'https://placeimg.com/140/140/any',
-      //     },
-      //   },
-      //   {
-      //       _id: 3,
-      //       text: 'tran thu ha',
-      //       createdAt: new Date(),
-      //       user: {
-      //         _id: 1,
-      //         name: 'React Native',
-      //         avatar: 'https://placeimg.com/140/140/any',
-      //       },
-      //   },
-      //   {
-      //       _id: 4,
-      //       text: 'Laivanhihieu',
-      //       createdAt: new Date(),
-      //       user: {
-      //         _id: 0,
-      //         name: 'React Native',
-      //         avatar: 'https://placeimg.com/140/140/any',
-      //       },
-      //   },
-      // ]);
     }, []);
   
     const onSend = useCallback((messages = []) => {    

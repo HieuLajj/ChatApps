@@ -10,16 +10,54 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  FlatList
 } from 'react-native';
+import {Container} from '../styles/FeedStyles'
 import FormButton from './FormButton';
-
+import PostCard2 from './PostCard2';
+const Posts = [
+  {
+    id: '1',
+    userName: 'Jenny Doe',
+    userImg: require('../../assets/icon.png'),
+    postTime: '4 mins ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../../assets/favicon.png'),
+    liked: true,
+    likes: '14',
+    comments: '5',
+  },
+  {
+    id: '2',
+    userName: 'John Doe',
+    userImg: require('../../assets/icon.png'),
+    postTime: '2 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: 'none',
+    liked: false,
+    likes: '8',
+    comments: '0',
+  },
+  {
+    id: '3',
+    userName: 'Ken William',
+    userImg:require('../../assets/icon.png'),
+    postTime: '1 hours ago',
+    post:
+      'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../../assets/favicon.png'),
+    liked: true,
+    likes: '1',
+    comments: '0',
+  },
+];
 const ProfileSearch = ({navigation, route}) => {
   let [userData, setUserData] = useState()
   useEffect(() => {
     let item = route.params.item;
-    console.log(item)
     setUserData(item)
-    console.log(userData)
   },[]);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -68,19 +106,25 @@ const ProfileSearch = ({navigation, route}) => {
             <Text style={styles.userInfoSubTitle}>Posts</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>10,000</Text>
+            <Text style={styles.userInfoTitle}>{route.params.item.followers.length}</Text>
             <Text style={styles.userInfoSubTitle}>Followers</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>100</Text>
+            <Text style={styles.userInfoTitle}>{route.params.item.followins.length}</Text>
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
         </View>
-
-        {/* {posts.map((item) => (
-          <PostCard key={item.id} item={item} onDelete={handleDelete} />
-        ))} */}
       </ScrollView>
+      <Container>
+        <FlatList
+          data={Posts}
+          renderItem={({item})=>
+          <PostCard2 item={item}/>
+          }
+          keyExtractor = {item => item.id}
+          showsVerticalScrollIndicator= {false}
+        />
+       </Container>
     </SafeAreaView>
   );
 };

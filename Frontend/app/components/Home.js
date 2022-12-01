@@ -88,7 +88,7 @@ export default function Home({navigation}) {
                             },
                             shadowOpacity: 0.3,
                             shadowRadius:20,
-                            width: windowWidth*0.91                    
+                            width: windowWidth*0.9                
                             }}
                 onPress={()=>{
                   navigation.navigate('ProfileSearch',{item: item})
@@ -115,7 +115,7 @@ export default function Home({navigation}) {
             data={messages}
             keyExtractor={item=>item.id}
             renderItem={({item}) => (
-              <Card onPress={() => navigation.navigate('Chat', {chatId: item.id, userYourId: item.idUser})}>
+              <Card onPress={() => navigation.navigate('Chat', {chatId: item.id, userYourId: item.idUser, avatar: item.avatar})}>
                 <UserInfo>
                   <UserImgWrapper>
                     <UserImg source={{uri: item.userImg}} />

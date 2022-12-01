@@ -4,6 +4,7 @@ const { isAuth } = require("../middlewares/validations/auth");
 const { validateUserSignUp, userVlidation, validateUserSignIn } = require("../middlewares/validations/user");
 
 router.post("/accessChat",isAuth, chatController.accessChat);
+router.post("/fetchOneChat",isAuth, chatController.fetchoneChats);
 router.get("/fetchChats",isAuth, chatController.fetchChats);
 // router.post("/createGroupChat",isAuth, chatController.createGroupChat);
 // router.put("/renameGroup", isAuth, chatController.renameGroup);
