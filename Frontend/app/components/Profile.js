@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {
   Avatar,
@@ -11,46 +11,16 @@ import PostCard2 from './PostCard2';
 import {useDispatch,useSelector} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container} from '../styles/FeedStyles'
-const Posts = [
-  {
-    id: '1',
-    userName: 'Jenny Doe',
-    userImg: require('../../assets/icon.png'),
-    postTime: '4 mins ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../../assets/favicon.png'),
-    liked: true,
-    likes: '14',
-    comments: '5',
-  },
-  {
-    id: '2',
-    userName: 'John Doe',
-    userImg: require('../../assets/icon.png'),
-    postTime: '2 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '8',
-    comments: '0',
-  },
-  {
-    id: '3',
-    userName: 'Ken William',
-    userImg:require('../../assets/icon.png'),
-    postTime: '1 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../../assets/favicon.png'),
-    liked: true,
-    likes: '1',
-    comments: '0',
-  },
-];
+import { allPostAUser } from '../api/api_post';
 export default function Profile({navigation}) {
   const info = useSelector((state)=>state.personalInfo)
+  const [post, setPost] = useState([]);
+  useEffect(() => {
+    console.log("hello");
+    allPostAUser(info.token, info.id,(data)=>{
+      setPost(data.data);
+    });
+  },[])
   return (
     <SafeAreaView style={styles.container}>
 
@@ -115,7 +85,7 @@ export default function Profile({navigation}) {
     </View>
     <Container>
       <FlatList
-        data={Posts}
+        data={post}
         renderItem={({item})=>
           <PostCard2 item={item}/>
         }

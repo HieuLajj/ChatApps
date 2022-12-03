@@ -1,20 +1,27 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { TouchableOpacity } from "react-native";
 import {Container, Card, UserInfo, UserImg, UserInfoText, UserName, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText, Divider} from '../styles/FeedStyles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch,useSelector} from 'react-redux'
+import { likePost } from "../api/api_post";
 const PostCard = ({item,navigation}) => {
-    let likeText=""
+    const info = useSelector((state)=>state.personalInfo)
     let commentText=""
-    let likeIcon = item.liked ? 'heart' : "heart-outline"
-    let  likeIconColor = item.liked ? '#2e64e5' : '#333';
-    if (item.likes == 1) {
-        likeText = '1 Like';
-      } else if (item.likes > 1) {
-        likeText = item.likes + ' Likes';
+    const [likeIcon, setLikeIcon] = useState("");
+    const [likeIconColor, setLikeIconColor] = useState("");
+    const [likeText, setLikeText] = useState("");
+    //let likeIcon = item.liked ? 'heart' : "heart-outline"
+    //let  likeIconColor = item.liked ? '#2e64e5' : '#333';
+   
+    function funcLikeText(data){
+      if (data == 1) {
+        return  '1 Like';
+      } else if (data > 1) {
+        return data + ' Likes';
       } else {
-        likeText = 'Like';
+        return 'Like';
       }
-    
+    }
     if (item.comments == 1) {
         commentText = '1 Chat';
       } else if (item.comments > 1) {
@@ -22,6 +29,12 @@ const PostCard = ({item,navigation}) => {
       } else {
         commentText = 'Chat';
     }
+
+    useEffect(() => {
+      setLikeIcon(item.liked ? 'heart' : "heart-outline")
+      setLikeIconColor(item.liked ? '#2e64e5' : '#333')
+      setLikeText(funcLikeText(item.likes))
+    },[])
     return(
         <Card>
         <UserInfo>
@@ -42,7 +55,20 @@ const PostCard = ({item,navigation}) => {
         {/* <PostImg source={require('../../assets/favicon.png')}/>
         <Divider/> */}
         <InteractionWrapper>
-            <Interaction active={item.liked} onPress={()=>{console.log("dang an like")}}>
+            <Interaction active={item.liked} onPress={()=>{
+              likePost(info.token,item.id,(data)=>{
+                console.log(data)
+                setLikeIcon(data ? 'heart' : "heart-outline")
+                setLikeIconColor(data? '#2e64e5' : '#333')
+                if(data == 1){
+                  item.likes += 1;
+                  setLikeText(funcLikeText(item.likes))
+                }else if(data == 0){
+                  item.likes -= 1;
+                  setLikeText(funcLikeText(item.likes))
+                }
+              })
+              }}>
                 <Ionicons name={likeIcon} size={25} color={likeIconColor}/>
                 <InteractionText>{likeText}</InteractionText>
             </Interaction>

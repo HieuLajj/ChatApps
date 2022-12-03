@@ -15,49 +15,24 @@ import {
 import {Container} from '../styles/FeedStyles'
 import FormButton from './FormButton';
 import PostCard2 from './PostCard2';
-const Posts = [
-  {
-    id: '1',
-    userName: 'Jenny Doe',
-    userImg: require('../../assets/icon.png'),
-    postTime: '4 mins ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../../assets/favicon.png'),
-    liked: true,
-    likes: '14',
-    comments: '5',
-  },
-  {
-    id: '2',
-    userName: 'John Doe',
-    userImg: require('../../assets/icon.png'),
-    postTime: '2 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '8',
-    comments: '0',
-  },
-  {
-    id: '3',
-    userName: 'Ken William',
-    userImg:require('../../assets/icon.png'),
-    postTime: '1 hours ago',
-    post:
-      'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../../assets/favicon.png'),
-    liked: true,
-    likes: '1',
-    comments: '0',
-  },
-];
+import {useDispatch,useSelector} from 'react-redux'
+import { allPostAUser } from '../api/api_post';
+import { followUser, unfollowUser } from '../api/api_user';
 const ProfileSearch = ({navigation, route}) => {
+  const info = useSelector((state)=>state.personalInfo)
   let [userData, setUserData] = useState()
+  const [post, setPost] = useState([]);
+  const [follow, setFollow] = useState("");
   useEffect(() => {
-    let item = route.params.item;
-    setUserData(item)
+    if(route.params.item.followers.includes(info.id)){
+      setFollow("UnFollow")
+    }else{
+      setFollow("Follow")
+    }
+    setUserData(route.params.item)
+    allPostAUser(info.token, route.params.item._id,(data)=>{
+      setPost(data.data);
+    });
   },[]);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -67,9 +42,9 @@ const ProfileSearch = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}>
         <Image
           style={styles.userImg}
-          source={{uri: route.params.item ? route.params.item.avatar || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'}}
+          source={{uri: userData ? userData.avatar || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'}}
         />
-        <Text style={styles.userName}>{route.params.item ? route.params.item.name : 'Lai van hieu'}</Text>
+        <Text style={styles.userName}>{userData ? userData.name : 'Lai van hieu'}</Text>
         {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
         <Text style={styles.aboutUser}>
         {userData ? userData.about || 'No details added.' : ''}
@@ -78,10 +53,18 @@ const ProfileSearch = ({navigation, route}) => {
           {route.params ? (
             <>
               <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
-                <Text style={styles.userBtnTxt}>Message</Text>
+                <Text style={styles.userBtnTxt}>Chat</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
-                <Text style={styles.userBtnTxt}>Follow</Text>
+              <TouchableOpacity style={styles.userBtn} onPress={() => {
+                if(follow == "Follow"){
+                  followUser(info.token, userData._id,(data)=>{console.log(data)})
+                  setFollow("UnFollow")
+                }else{
+                  unfollowUser(info.token, userData._id,(data)=>{console.log(data)})
+                  setFollow("Follow")
+                }
+              }}>
+                <Text style={styles.userBtnTxt}>{follow}</Text>
               </TouchableOpacity>
             </>
           ) : (
@@ -102,7 +85,7 @@ const ProfileSearch = ({navigation, route}) => {
 
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>posts</Text>
+            <Text style={styles.userInfoTitle}>{post.length}</Text>
             <Text style={styles.userInfoSubTitle}>Posts</Text>
           </View>
           <View style={styles.userInfoItem}>
@@ -117,7 +100,7 @@ const ProfileSearch = ({navigation, route}) => {
       </ScrollView>
       <Container>
         <FlatList
-          data={Posts}
+          data={post}
           renderItem={({item})=>
           <PostCard2 item={item}/>
           }

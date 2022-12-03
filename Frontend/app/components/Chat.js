@@ -18,7 +18,19 @@ export default function Chat(props) {
     useEffect(() => {
       //console.log(props.route.params.chatId+"okookokkokokokok"+props.route.params.userYourId);
       allMessages(info.token, props.route.params.chatId,(data)=>{
-        setMessages(data)
+        var data2 = data.map((data)=>{
+          return{
+                _id: data._id,
+                text: data.text,
+                createdAt: data.createdAt,
+                user: {
+                  _id: data.user._id,
+                  name: data.user.name,
+                  avatar: props.route.params.avatar
+                },
+          }
+        })
+        setMessages(data2)
       })
       socket.on("message recieved",(data)=>{
         let messages2 = JSON.parse(data);

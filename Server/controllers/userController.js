@@ -183,14 +183,15 @@ const userController = {
               if(!userfollow.followers.includes(req.user._id)){
                   await userfollow.updateOne({$push:{followers: req.user._id}});
                   await currentUser.updateOne({$push: {followins: id }});
-                  res.status(200).json("user has been follwed");
+                  res.json({data : "user has been follwed"});
               }else{
-                  res.status(403).json("you allready follow this user")
+                  res.json({data:"you allready follow this user"})
               }
           }else{
-              res.status(403).json("you cant unfollow yourself")
+              res.json({data : "you cant unfollow yourself"});
           }
-      } catch (error) {       
+      } catch (error) {    
+        console.log(error)   
       }
     },
     //unfollow a user
@@ -203,12 +204,13 @@ const userController = {
               if(userfollow.followers.includes(req.user._id)){
                   await userfollow.updateOne({$pull:{followers: req.user._id}});
                   await currentUser.updateOne({$pull: {followins: id }});
-                  res.status(200).json("user has been unfollwed");
+                  res.json({data : "user has been unfollwed"});
+                  
               }else{
-                  res.status(403).json("you dont follow this user")
+                  res.json({data : "you dont follow this user"});
               }
           }else{
-              res.status(403).json("you cant unfollow yourself")
+              res.json({data : "ou cant unfollow yourself"});
           }
       } catch (error) {
           

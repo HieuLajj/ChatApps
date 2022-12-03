@@ -37,7 +37,7 @@ router.post('/update',isAuth,userController.updateProfileMain);
 router.get("/searchuser",isAuth, userController.allUsers);
 
 //follow
-router.put('/follow/:id',isAuth,userController.follow);
+router.get('/follow/:id',isAuth,userController.follow);
 //unfollow
-router.put('/unfollow/:id',isAuth,userController.unfollow);
+router.get('/unfollow/:id',isAuth,userController.unfollow);
 module.exports = router;

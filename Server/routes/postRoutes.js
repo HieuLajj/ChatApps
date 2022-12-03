@@ -19,4 +19,5 @@ router.post('/addPost',isAuth, uploads.single('imgPost'),postController.addPost)
 
 router.get('/allPost', isAuth, postController.allPost);
 router.post('/allPostaUser', isAuth, postController.allPostAUser);
+router.get('/like/:id', isAuth, postController.like)
 module.exports = router;                                                                     

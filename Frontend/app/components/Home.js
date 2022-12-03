@@ -115,7 +115,11 @@ export default function Home({navigation}) {
             data={messages}
             keyExtractor={item=>item.id}
             renderItem={({item}) => (
-              <Card onPress={() => navigation.navigate('Chat', {chatId: item.id, userYourId: item.idUser, avatar: item.avatar})}>
+              <Card onPress={() =>
+               {navigation.navigate('Chat', {chatId: item.id, userYourId: item.idUser, avatar: item.userImg})
+               //console.log(item);
+              }
+               }>
                 <UserInfo>
                   <UserImgWrapper>
                     <UserImg source={{uri: item.userImg}} />

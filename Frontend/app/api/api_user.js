@@ -29,8 +29,41 @@ const searchUser = async(token, text, myCallback) => {
          console.log(error.message);    
     }
 }
+
+const followUser = async(token, id, myCallback) => {
+    const config = {
+        headers: {
+          Authorization: `jwt ${token}`
+        },
+    };
+
+    try {
+        const res = await client.get(`/laihieu/user/follow/${id}`,config) 
+        myCallback(res.data)  
+    } catch (error) {
+        console.log(error);    
+    }
+}
+
+const unfollowUser = async(token, id, myCallback) => {
+    const config = {
+        headers: {
+          Authorization: `jwt ${token}`
+        },
+    };
+
+    try {
+        const res = await client.get(`/laihieu/user/unfollow/${id}`,config); 
+        myCallback(res.data)  
+    } catch (error) {
+         console.log(error.message);    
+    }
+}
+
 export {
     loginUser,
-    searchUser
+    searchUser,
+    followUser,
+    unfollowUser
 }
  
