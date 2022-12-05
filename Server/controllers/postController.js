@@ -37,8 +37,15 @@ const chatController = {
     allPost : async(req,res) => {
         const {user} = req;
         try {
-            const exp = await Post.find().populate("userId")
-            let exp2 = Promise.all(exp.map(async(item)=>{
+            let b = [];
+            const friendPosts = await Promise.all(user.followins.map((friendId)=>{
+               return Post.find({"userId": friendId}).populate("userId")
+            }))
+            friendPosts.forEach(element => {
+                b = b.concat(...element)
+            });
+            //const exp = await Post.find().populate("userId")
+            let exp2 = Promise.all(b.map(async(item)=>{
                 let friendId = null
                 if(user._id != item.userId._id){
                     const chatfriend = await Chat.find({ 
@@ -69,6 +76,10 @@ const chatController = {
                     })
                 }
             )
+            // res.status(201).json({
+            //     success: true,
+            //     data: b,
+            // })
         } catch (error) {
            res.status(500).json(error);  
         }

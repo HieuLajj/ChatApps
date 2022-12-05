@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {View, SafeAreaView, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import {
   Avatar,
   Title,
@@ -15,12 +15,13 @@ import { allPostAUser } from '../api/api_post';
 export default function Profile({navigation}) {
   const info = useSelector((state)=>state.personalInfo)
   const [post, setPost] = useState([]);
+  const [reset,setReset] = useState(false)
+  const [refreshControl,setRefreshControl] = useState(false)
   useEffect(() => {
-    console.log("hello");
     allPostAUser(info.token, info.id,(data)=>{
       setPost(data.data);
     });
-  },[])
+  },[reset])
   return (
     <SafeAreaView style={styles.container}>
 
@@ -91,6 +92,14 @@ export default function Profile({navigation}) {
         }
         keyExtractor = {item => item.id}
         showsVerticalScrollIndicator= {false}
+        refreshControl = {
+          <RefreshControl refreshing = {refreshControl} onRefresh={()=>{
+            setRefreshControl(true)
+            setReset(!reset)
+            setRefreshControl(false)
+          }} colors={['red']}
+          />
+        }
       />
     </Container>
   </SafeAreaView>

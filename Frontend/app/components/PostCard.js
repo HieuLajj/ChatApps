@@ -10,8 +10,6 @@ const PostCard = ({item,navigation}) => {
     const [likeIcon, setLikeIcon] = useState("");
     const [likeIconColor, setLikeIconColor] = useState("");
     const [likeText, setLikeText] = useState("");
-    //let likeIcon = item.liked ? 'heart' : "heart-outline"
-    //let  likeIconColor = item.liked ? '#2e64e5' : '#333';
    
     function funcLikeText(data){
       if (data == 1) {
@@ -74,7 +72,7 @@ const PostCard = ({item,navigation}) => {
             </Interaction>
             <Interaction onPress={()=>{
               console.log(item.name)
-              navigation.navigate('Chat', {chatId: item.friendId, userYourId: item.idUser, avatar: item.avatar})
+              navigation.navigate('Chat', {chatId: item.friendId, userYourId: item.idUser, avatar: item.userImg})
             }}>
                 <Ionicons name="md-chatbubble-outline" size={25}/>
                 <InteractionText>{commentText}</InteractionText>

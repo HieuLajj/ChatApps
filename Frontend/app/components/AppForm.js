@@ -47,7 +47,7 @@ export default function AppForm({ navigation }) {
         <FormHeader
           leftHeading='Welcome '
           rightHeading='Social'
-          subHeading='Social network for fools'
+          subHeading='private social network'
           rightHeaderOpacity={rightHeaderOpacity}
           leftHeaderTranslateX={leftHeaderTranslateX}
           rightHeaderTranslateY={rightHeaderTranslateY}

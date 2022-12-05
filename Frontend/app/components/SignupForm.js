@@ -119,7 +119,7 @@ const SignupForm = ({ navigation }) => {
                 onChangeText={handleChange('fullname')}
                 onBlur={handleBlur('fullname')}
                 label='Full Name'
-                placeholder='John Smith'
+                placeholder='Hieu Lajj'
               />
               <FormInput
                 value={email}

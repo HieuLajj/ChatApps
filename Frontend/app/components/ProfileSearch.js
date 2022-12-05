@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  FlatList
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import {Container} from '../styles/FeedStyles'
 import FormButton from './FormButton';
@@ -23,6 +24,8 @@ const ProfileSearch = ({navigation, route}) => {
   let [userData, setUserData] = useState()
   const [post, setPost] = useState([]);
   const [follow, setFollow] = useState("");
+  const [reset,setReset] = useState(false)
+  const [refreshControl,setRefreshControl] = useState(false)
   useEffect(() => {
     if(route.params.item.followers.includes(info.id)){
       setFollow("UnFollow")
@@ -33,7 +36,7 @@ const ProfileSearch = ({navigation, route}) => {
     allPostAUser(info.token, route.params.item._id,(data)=>{
       setPost(data.data);
     });
-  },[]);
+  },[reset]);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView
@@ -106,6 +109,14 @@ const ProfileSearch = ({navigation, route}) => {
           }
           keyExtractor = {item => item.id}
           showsVerticalScrollIndicator= {false}
+          refreshControl = {
+            <RefreshControl refreshing = {refreshControl} onRefresh={()=>{
+              setRefreshControl(true)
+              setReset(!reset)
+              setRefreshControl(false)
+            }} colors={['red']}
+            />
+          }
         />
        </Container>
     </SafeAreaView>

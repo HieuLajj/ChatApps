@@ -7,6 +7,7 @@ import {
   FlatList,
   SafeAreaView,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {Container, Card, UserInfo, UserImg, UserInfoText, UserName, PostTime, PostText, PostImg, InteractionWrapper, Interaction, InteractionText, Divider} from '../styles/FeedStyles'
@@ -55,13 +56,15 @@ const Posts = [
 export default function Global({navigation}) {
   const info = useSelector((state)=>state.personalInfo)
   const [post, setPost] = useState([]);
+  const [reset,setReset] = useState(false)
+  const [refreshControl,setRefreshControl] = useState(false)
   useEffect(()=>{
     allPost(info.token,(data)=>{
-      console.log("======================")
-      console.log(data.data)
+      // console.log("======================")
+      // console.log(data.data)
       setPost(data.data)
     })
-  },[])
+  },[reset])
   return (
     <Container>
        <FlatList
@@ -71,6 +74,16 @@ export default function Global({navigation}) {
         }
         keyExtractor = {item => item.id}
         showsVerticalScrollIndicator= {false}
+        refreshControl = {
+          <RefreshControl refreshing = {refreshControl} onRefresh={()=>{
+            setRefreshControl(true)
+            setReset(!reset)
+            console.log("hello")
+            setRefreshControl(false)
+          }} colors={['red']}
+          />
+        }
+        
        />
     </Container>
   );
