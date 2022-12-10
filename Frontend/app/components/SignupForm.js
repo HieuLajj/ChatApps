@@ -66,11 +66,13 @@ const SignupForm = ({ navigation }) => {
   const sumbitForm = () => {
     if (isValidForm()) {
       // submit form
+      console.log("Fefe")
       console.log(userInfo);
     }
   };
 
   const signUp = async (values, formikActions) => {
+    console.log("vvv")
     console.log(values)
     // const res = await client.post('/create-user', {
     //   ...values,

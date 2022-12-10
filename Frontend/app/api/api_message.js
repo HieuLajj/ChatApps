@@ -16,13 +16,22 @@ const allMessages = async(token, id, myCallback) => {
     }
 }
 
-const sendMessage = async(token, contentSend, chatIdSend, image)=>{
+const sendMessage = async(token, contentSend, chatIdSend, image,video)=>{
     const formData = new FormData();
-    formData.append('imgChat',{
-        name: new Date() + 'post',
-        uri: image,
-        type: 'image/jpg'
-    })
+    if (image != null){
+        formData.append('imgChat',{
+            name: new Date() + 'post',
+            uri: image,
+            type: 'image/jpg'
+        })
+    }
+    if (video != null){
+        formData.append('imgVideo',{
+            name: new Date() + 'videopost',
+            uri: video,
+            type: 'video/mp4'
+        })
+    }
     formData.append('content', contentSend)
     formData.append('chatId', chatIdSend)
     const config = {
@@ -32,7 +41,6 @@ const sendMessage = async(token, contentSend, chatIdSend, image)=>{
            Authorization: `jwt ${token}`
         },
     };
-    // console.log(contentSend+"fawefawefaew"+contentSend.toString());
     try {
         const res = await client.post(`/laihieu/message/sendMessage`
         ,
@@ -41,7 +49,7 @@ const sendMessage = async(token, contentSend, chatIdSend, image)=>{
         console.log("da gui tin nhan thanh cong");
         //return res.data   
     } catch (error) {
-        console.log(error.message);    
+        console.log(error);    
     }
 }
 export {

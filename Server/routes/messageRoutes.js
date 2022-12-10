@@ -14,10 +14,25 @@ const fileFilter = (req, file, cb) => {
       cb('invalid image file!', false);
     }
 };
+const uploads = multer({storage});
 
-const uploads = multer({ storage, fileFilter });
-{imgChat: 'image'}
-router.post("/sendMessage",isAuth, uploads.single('imgChat'), messageController.sendMessage);
+// const uploads = multer({ storage, fileFilter });
+
+// const fileFilter2 = (req, file, cb) => {
+//   if (file.mimetype.startsWith('video')) {
+//     cb(null, true);
+//   } else {
+//     cb('invalid image file!', false);
+//   }
+// };
+
+// const uploads2 = multer({ storage, fileFilter2 });
+{imgChat: 'image'}{imgVideo : 'video'}
+// router.post("/sendMessage",isAuth, uploads.single('imgChat'), messageController.sendMessage);
+router.post('/sendMessage',isAuth, uploads.fields([
+  { name: 'imgChat'},
+  { name: 'imgVideo'}
+]), messageController.sendMessage)
 router.get("/allMessage/:chatId",isAuth, messageController.allMessages);
 // router.post("/createGroupChat",isAuth, chatController.createGroupChat);
 

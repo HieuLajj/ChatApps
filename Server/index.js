@@ -1,4 +1,5 @@
 const express = require("express");
+var CryptoJS = require("crypto-js");
 const cors = require("cors");
 const app = express();
 var bodyParser = require("body-parser");
@@ -78,3 +79,11 @@ io.on("connection",(socket)=>{
         console.log(roomid+"User Joined Room: " + room);
     });
 })
+// var ciphertext = CryptoJS.AES.encrypt('laivanhieu', '63607fdd19eafe1572f09203').toString();
+
+// console.log(ciphertext); // 'my message'
+// // Decrypt
+// var bytes  = CryptoJS.AES.decrypt(ciphertext, '63607fdd19eafe1572f09203');
+// var originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+// console.log(originalText); // 'my message'

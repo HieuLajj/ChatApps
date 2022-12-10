@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import { Audio, Video } from 'expo-av';
 import {View, ScrollView, Text, Button, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,6 +14,7 @@ export default function Chat(props) {
     const info = useSelector((state)=>state.personalInfo)
     const [messages, setMessages] = useState([]);
     const [imageData, setImageData] = useState(null);
+    const [videoData, setVideoData] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     useEffect(()=>{
       socket = io("http://192.168.1.234:8000")
@@ -22,7 +24,6 @@ export default function Chat(props) {
       //console.log(props.route.params.chatId+"okookokkokokokok"+props.route.params.userYourId);
       allMessages(info.token, props.route.params.chatId,(data)=>{
         var data2 = data.map((data)=>{
-          //console.log(data)
           return{
                 _id: data._id,
                 text: data.text,
@@ -32,7 +33,8 @@ export default function Chat(props) {
                   name: data.user.name,
                   avatar: props.route.params.avatar
                 },
-                image: data?.image ? data.image : null
+                image: data?.image ? data.image : null,
+                video: data?.video ? data.video : null,
           }
         })
         setMessages(data2)
@@ -59,8 +61,9 @@ export default function Chat(props) {
         //     },
         //     image: 'https://placeimg.com/140/140/any',
         //     // You can also add a video prop:
-        //     //video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        //     video: 'https://res.cloudinary.com/hieulajj/video/upload/v1670650831/63608957cf813b532672b321video_post1670650826362.mp4',
         //     // Mark the message as sent, using one tick
+        //     //video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
         //     sent: true,
         //     // Mark the message as received, using two tick
         //     received: true,
@@ -92,11 +95,42 @@ export default function Chat(props) {
         setImageData(result.uri)
       }
     }
+    const OpenVideo = async () => {
+      console.log("dang pick Video");
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        quality:1
+      })
+      if(!result.cancelled){
+        setVideoData(result.uri)
+        //console.log(result.uri)
+      }
+    }
+
     const onSend = useCallback((messages = []) => {    
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, messages),
       );
     }, []);
+    const renderMessageVideo = (props) => {
+      const { currentMessage } = props;
+      console.log(currentMessage.video)
+      return (
+        <View style={{ padding: 20 }}>
+          {currentMessage ? 
+            <Video
+              style={styles.video}
+              resizeMode="contain"
+              useNativeControls
+              shouldPlay={false}
+              isLooping
+              source={{ uri: currentMessage.video }}
+            />
+            :null
+          }
+        </View>
+      );
+    };
 
   
     const renderSend = (props) => {
@@ -118,11 +152,11 @@ export default function Chat(props) {
           />
           <TouchableOpacity
             onPress={()=>{
-              //OpenCamera();
+              OpenVideo();
             }}
           >
             <MaterialCommunityIcons
-              name="attachment"
+              name="video"
               //style={{marginBottom: 5, marginRight: 5}}
               size={32}
               color="#2e64e5"
@@ -185,7 +219,9 @@ export default function Chat(props) {
             messages={messages}
             onSend={(messages) =>{
               onSend(messages)
-              sendMessage(info.token, messages[0].text, props.route.params.chatId,imageData)
+              sendMessage(info.token, messages[0].text, props.route.params.chatId,imageData, videoData)
+              setImageData(null);
+              setVideoData(null);
               socket.emit('message recieved',JSON.stringify(messages))
             }}
             user={{
@@ -193,6 +229,7 @@ export default function Chat(props) {
             }}
             renderBubble={renderBubble}
             alwaysShowSend
+            renderMessageVideo={renderMessageVideo}
             renderSend={renderSend}
             scrollToBottom
             scrollToBottomComponent={scrollToBottomComponent}
@@ -206,4 +243,9 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    video:{
+      height:200,
+      width: 200,
+      alignSelf:'stretch'
+    }
   });

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const Chat = require("../models/chatModel");
 const user = require("../models/user");
+var CryptoJS = require("crypto-js");
 const chatController = {
   
   accessChat : async (req,res)=>{
@@ -62,19 +63,22 @@ const chatController = {
               select: "name pic email",
             });
             var map = results.map((item)=>{
-              console.log(item.users[1].name +"--"+item.users[0].name+"--"+req.user.name)
               let useryour =  item.users[0].name == req.user.name ? item.users[1] : item.users[0]
               let message = item?.latestMessage
+              let messDec="";
               let time =  message?.updatedAt;
               let timecv = time?.toLocaleString("en-US");
-            
+              if(message!=null){
+                var bytes = CryptoJS.AES.decrypt(message.content, message.sender._id.toString());
+                messDec = bytes.toString(CryptoJS.enc.Utf8);
+              }
               return {
                 id: item._id,
                 idUser: useryour._id,
                 userName: useryour.name,
                 userImg: useryour.avatar,
                 messageTime: timecv,
-                messageText: message?.content
+                messageText: messDec
               }
             })
             //res.status(200).send(results);
