@@ -19,6 +19,7 @@ import PostCard2 from './PostCard2';
 import {useDispatch,useSelector} from 'react-redux'
 import { allPostAUser } from '../api/api_post';
 import { followUser, unfollowUser } from '../api/api_user';
+import { accessChat } from '../api/api_chat';
 const ProfileSearch = ({navigation, route}) => {
   const info = useSelector((state)=>state.personalInfo)
   let [userData, setUserData] = useState()
@@ -55,7 +56,10 @@ const ProfileSearch = ({navigation, route}) => {
         <View style={styles.userBtnWrapper}>
           {route.params ? (
             <>
-              <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
+              <TouchableOpacity style={styles.userBtn} onPress={() => {
+                // console.log("dang ket noi voi"+  userData._id);
+                accessChat(info.token, userData._id,(data)=>{console.log(data)})
+              }}>
                 <Text style={styles.userBtnTxt}>Chat</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.userBtn} onPress={() => {

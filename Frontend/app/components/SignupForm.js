@@ -6,14 +6,14 @@ import FormContainer from './FormContainer';
 import FormInput from './FormInput';
 import FormSubmitButton from './FormSubmitButton';
 import { StackActions } from '@react-navigation/native';
-
+import { createUser } from '../api/api_user';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 //import client from '../api/client';
 
 const validationSchema = Yup.object({
-  fullname: Yup.string()
+  name: Yup.string()
     .trim()
     .min(3, 'Invalid name!')
     .required('Name is required!'),
@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
 
 const SignupForm = ({ navigation }) => {
   const userInfo = {
-    fullname: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -38,7 +38,7 @@ const SignupForm = ({ navigation }) => {
 
   const [error, setError] = useState('');
 
-  const { fullname, email, password, confirmPassword } = userInfo;
+  const { name, email, password, confirmPassword } = userInfo;
 
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
@@ -49,7 +49,7 @@ const SignupForm = ({ navigation }) => {
     if (!isValidObjField(userInfo))
       return updateError('Required all fields!', setError);
     // if valid name with 3 or more characters
-    if (!fullname.trim() || fullname.length < 3)
+    if (!name.trim() || name.length < 3)
       return updateError('Invalid name!', setError);
     // only valid email id is allowed
     if (!isValidEmail(email)) return updateError('Invalid email!', setError);
@@ -72,8 +72,9 @@ const SignupForm = ({ navigation }) => {
   };
 
   const signUp = async (values, formikActions) => {
-    console.log("vvv")
-    console.log(values)
+    // console.log("vvv")
+    // console.log(values)
+    createUser(values)
     // const res = await client.post('/create-user', {
     //   ...values,
     // });
@@ -112,14 +113,14 @@ const SignupForm = ({ navigation }) => {
           handleBlur,
           handleSubmit,
         }) => {
-          const { fullname, email, password, confirmPassword } = values;
+          const { name, email, password, confirmPassword } = values;
           return (
             <>
               <FormInput
-                value={fullname}
-                error={touched.fullname && errors.fullname}
-                onChangeText={handleChange('fullname')}
-                onBlur={handleBlur('fullname')}
+                value={name}
+                error={touched.name && errors.name}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
                 label='Full Name'
                 placeholder='Hieu Lajj'
               />

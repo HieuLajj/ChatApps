@@ -24,7 +24,7 @@ const createUser = async(inputs) => {
         //   const token = res.data.token
         //   await AsyncStorage.setItem('token', token)
         // }
-       
+       console.log(JSON.stringify(inputs)+"hahahahahaha")
         return res.data   
     } catch (error) {
          console.log(error.message);    
@@ -80,6 +80,7 @@ export {
     loginUser,
     searchUser,
     followUser,
-    unfollowUser
+    unfollowUser,
+    createUser
 }
  

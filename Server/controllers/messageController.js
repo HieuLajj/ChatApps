@@ -31,6 +31,12 @@ const messageController = {
           resource_type:"video",
         });
       }
+      if(req?.files?.imgAudio){
+        resultAudio = await cloudinary.uploader.upload(req.files.imgAudio[0].path,{
+          public_id: `${user._id}audio_post${Date.now()}`,
+          resource_type:"video",
+        });
+      }
       var DecryptContent = CryptoJS.AES.encrypt(content, user._id.toString()).toString();
       var newMessage = {
         sender: user._id,
