@@ -46,6 +46,7 @@ app.get('/',(req,res)=>{
 //     key: fs.readFileSync(path.join(__dirname,'cert', 'key.pem')),
 //     cert: fs.readFileSync(path.join(__dirname,'cert', 'cert.pem'))
 // },app)
+// server.listen(8000,()=>console.log("Server is running..."))
 const server = app.listen(8000,()=>{
     console.log("Server is running...");
 })

@@ -7,8 +7,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {allMessages, sendMessage} from '../api/api_message'
 import {useDispatch,useSelector} from 'react-redux'
 import * as ImagePicker from 'expo-image-picker'
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import { StorageAccessFramework } from 'expo-file-system';
 import Slider from '@react-native-community/slider'
 import io from 'socket.io-client'
+import * as Linking from 'expo-linking';
+import * as DocumentPicker from 'expo-document-picker';
 const ENDPOINT = "http:// 169.254.225.93:8000"
 let socket;
 
@@ -23,11 +29,13 @@ export default function Chat(props) {
     const [recordings, setRecordings] = React.useState([]);
     const [playbackObj, setPlayBackObj] = React.useState(null);
     const [playing, SetPlaying] = React.useState(false);
-    const [sound, setSound] = useState();
+    const [sound, setSound] = useState('');
+    const [raw, setRaw] = useState('')
 
     useEffect(()=>{
       socket = io("http://192.168.1.234:8000")
       socket.emit("join chat", props.route.params.chatId);
+      
     },[])
     useEffect(() => {
       //console.log(props.route.params.chatId+"okookokkokokokok"+props.route.params.userYourId);
@@ -44,45 +52,48 @@ export default function Chat(props) {
                 },
                 image: data?.image ? data.image : null,
                 video: data?.video ? data.video : null,
+                audio: data?.audio ? data.audio : null,
+                pdf: data?.pdf ? data.pdf: null
           }
         })
-        // setMessages(data2)
+        setMessages(data2)
         // console.log(data2)
-        setMessages([
-          {
-            _id: 1,
-            text: 'Hello developer',
-            audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-            createdAt: new Date(),
-            user: {
-              _id: 2,
-              name: 'React Native',
-              avatar: 'https://placeimg.com/140/140/any',
-            },
-          },
-          {
-            _id: 2,
-            text: 'My message',
-            createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-            user: {
-              _id: 2,
-              name: 'React Native',
-              avatar: 'https://placeimg.com/140/140/any',
-            },
-            image: 'https://placeimg.com/140/140/any',
-            // You can also add a video prop:
-            video: 'https://res.cloudinary.com/hieulajj/video/upload/v1670650831/63608957cf813b532672b321video_post1670650826362.mp4',
-            audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-            // Mark the message as sent, using one tick
-            //video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-            sent: true,
-            // Mark the message as received, using two tick
-            received: true,
-            // Mark the message as pending with a clock loader
-            pending: true,
-            // Any additional custom parameters are passed through
-          }
-        ])
+        // setMessages([
+        //   {
+        //     _id: 1,
+        //     text: 'Hello developer',
+        //     audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        //     pdf: "https://res.cloudinary.com/hieulajj/image/upload/v1671547207/6360856168609521ddd9ff31_post1671547201619.jpg",
+        //     createdAt: new Date(),
+        //     user: {
+        //       _id: 2,
+        //       name: 'React Native',
+        //       avatar: 'https://placeimg.com/140/140/any',
+        //     },
+        //   },
+        //   {
+        //     _id: 2,
+        //     text: 'My message',
+        //     createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+        //     user: {
+        //       _id: 2,
+        //       name: 'React Native',
+        //       avatar: 'https://placeimg.com/140/140/any',
+        //     },
+        //     image: 'https://placeimg.com/140/140/any',
+        //     // You can also add a video prop:
+        //     video: 'https://res.cloudinary.com/hieulajj/video/upload/v1670650831/63608957cf813b532672b321video_post1670650826362.mp4',
+        //     audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+        //     // Mark the message as sent, using one tick
+        //     //video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        //     sent: true,
+        //     // Mark the message as received, using two tick
+        //     received: true,
+        //     // Mark the message as pending with a clock loader
+        //     pending: true,
+        //     // Any additional custom parameters are passed through
+        //   }
+        // ])
         
       })
       socket.on("message recieved",(data)=>{
@@ -105,7 +116,7 @@ export default function Chat(props) {
           const { recording } = await Audio.Recording.createAsync(
             {
               android: {
-                extension: '.mp3',
+                extension: '.m4a',
                 sampleRate: 44100,
                 numberOfChannels: 2,
                 bitRate: 128000,
@@ -142,7 +153,7 @@ export default function Chat(props) {
         duration: getDurationFormatted(status.durationMillis),
         file: recording.getURI()
       });
-  
+      setSound(recording.getURI())
       setRecordings(updatedRecordings);
     }
     function getDurationFormatted(millis) {
@@ -162,7 +173,8 @@ export default function Chat(props) {
               onPress={
                 ()=>{
                   recordingLine.sound.replayAsync()
-                  console.log(recordingLine.file)
+                  // setSound(recordingLine.file)
+                  // console.log(recordingLine.file)
                 }
               }
             >
@@ -262,7 +274,7 @@ export default function Chat(props) {
       const { currentMessage } = props;
       return (
         <View style={{}}>
-          {currentMessage ?
+          {currentMessage?.audio != null ?
             <View style={{
               flexDirection:'row'
             }}>
@@ -272,8 +284,8 @@ export default function Chat(props) {
                     if(playing){
                       PauseAudio();
                     }else{
-                      //PlayAudio(currentMessage.audio);
-                      PlayAudio("https://res.cloudinary.com/hieulajj/video/upload/v1671332945/63608957cf813b532672b321audio_post1671332943423.m4a");
+                      PlayAudio(currentMessage.audio);
+                      //PlayAudio("https://res.cloudinary.com/hieulajj/video/upload/v1671332945/63608957cf813b532672b321audio_post1671332943423.m4a");
                     }
                     SetPlaying(!playing);
                   }
@@ -383,6 +395,21 @@ export default function Chat(props) {
               color="#2e64e5"
             />
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async()=>{
+              let result = await DocumentPicker.getDocumentAsync({
+                type: "*/*"
+              })
+              console.log(result);
+              setRaw(result);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="file-upload"
+              size={32}
+              color="#2e64e5"
+            />
+          </TouchableOpacity>
           <Send {...props}>
             <View>
               <MaterialCommunityIcons
@@ -414,6 +441,56 @@ export default function Chat(props) {
         />
       );
     };
+    const renderCustomView = (props) => {
+      if (props?.currentMessage?.pdf) {
+        return(
+          <TouchableOpacity onPress={()=>{
+            console.log(props?.currentMessage?.pdf)
+            downloadFile(props?.currentMessage?.pdf);
+            console.log("hahahah")
+          }}>
+            <Text>Day la file pdf
+            </Text>
+          </TouchableOpacity>
+        );
+      }
+    }
+    const downloadFile=(uri)=>{
+      // const uri = "http://techslides.com/demos/sample-videos/small.mp4"
+      let fileUri = FileSystem.documentDirectory + "small.jpg";
+      FileSystem.downloadAsync(uri, fileUri)
+      .then(({ uri }) => {
+          //Linking.openURL(uri);
+          saveFile(uri);
+          //console.log(uri+"nakan")
+        })
+        .catch(error => {
+          console.error(error+"jojojo");
+        })
+  }
+  
+  const saveFile = async (fileUri) => {
+    console.log("ffff"+fileUri)
+    const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    if (perm.status != 'granted') {
+      return;
+    }
+
+    try {
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      const album = await MediaLibrary.getAlbumAsync('Download');
+    // if (album == null) {
+    //   await MediaLibrary.createAlbumAsync('Download', asset, false);
+    //   console.log("Bbbb");
+    // } else {
+    //   await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+    //   console.log("aaa");
+    // }
+    console.log("fhajhfwjs"+album)
+    } catch (e) {
+      console.log(e);
+    }
+  }
   
     const scrollToBottomComponent = () => {
       return(
@@ -427,8 +504,19 @@ export default function Chat(props) {
         <GiftedChat
             messages={messages}
             onSend={(messages) =>{
+              messages[0].image  = imageData;
+              messages[0].video = videoData;
+              messages[0].audio = sound;
+              messages[0].pdf = raw;
+        
+              // image: data?.image ? data.image : null,
+              //   video: data?.video ? data.video : null,
+              //   audio: data?.audio ? data.audio : null,
               onSend(messages)
-              sendMessage(info.token, messages[0].text, props.route.params.chatId,imageData, videoData)
+              sendMessage(info.token, messages[0].text, props.route.params.chatId,imageData, videoData, sound, raw)
+              setSound("")
+              setRaw("")
+              setRecordings([]);
               setImageData(null);
               setVideoData(null);
               socket.emit('message recieved',JSON.stringify(messages))
@@ -440,6 +528,7 @@ export default function Chat(props) {
             alwaysShowSend
             renderMessageVideo={renderMessageVideo}
             renderMessageAudio={renderAudio}
+            renderCustomView={renderCustomView}
             renderSend={renderSend}
             scrollToBottom
             scrollToBottomComponent={scrollToBottomComponent}

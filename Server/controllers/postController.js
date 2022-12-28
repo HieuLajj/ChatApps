@@ -7,7 +7,7 @@ const Post  = require("../models/Post")
 const cloudinary = require('../helper/imageUpload')
 const chatController = {
     addPost : async (req,res)=>{
-        console.log("add post +++++")
+        //console.log("add post +++++")
         const {user} = req;
         let {post} = req.body
         try {

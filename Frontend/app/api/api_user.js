@@ -46,6 +46,32 @@ const searchUser = async(token, text, myCallback) => {
     }
 }
 
+const updateUser = async(token, inputs, myCallback) => {
+    const config = {
+        headers: {
+          Authorization: `jwt ${token}`
+        },
+    };
+    let a={}
+    if(inputs?.name){
+        a.name = inputs?.name
+    }
+    if(inputs?.email){
+        a.email = inputs?.email
+    }
+    if(inputs?.phone){
+        a.phone = inputs?.phone
+    }
+
+    try {
+        const res = await client.post(`/laihieu/user/update`,a,config); 
+          console.log(res.data)
+        myCallback(res.data)  
+    } catch (error) {
+         console.log(error.message);    
+    }
+}
+
 const followUser = async(token, id, myCallback) => {
     const config = {
         headers: {
@@ -81,6 +107,7 @@ export {
     searchUser,
     followUser,
     unfollowUser,
-    createUser
+    createUser,
+    updateUser
 }
  

@@ -27,12 +27,13 @@ const uploads = multer({storage});
 // };
 
 // const uploads2 = multer({ storage, fileFilter2 });
-{imgChat: 'image'}{imgVideo : 'video'}{imgAudio : 'video'}
+{imgChat: 'image'}{imgVideo : 'video'}{imgAudio : 'video'}{imgRaw: 'raw'}
 // router.post("/sendMessage",isAuth, uploads.single('imgChat'), messageController.sendMessage);
 router.post('/sendMessage',isAuth, uploads.fields([
   { name: 'imgChat'},
   { name: 'imgVideo'},
-  { name: 'imgAudio'}
+  { name: 'imgAudio'},
+  {name: 'imgRaw'}
 ]), messageController.sendMessage)
 router.get("/allMessage/:chatId",isAuth, messageController.allMessages);
 // router.post("/createGroupChat",isAuth, chatController.createGroupChat);

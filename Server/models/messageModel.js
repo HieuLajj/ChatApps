@@ -6,6 +6,8 @@ const messageSchema = mongoose.Schema(
     content: { type: String, trim: true },
     image:  {type: String},
     video: {type: String},
+    audio: {type: String},
+    pdf: {type: String},
     chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
     readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },

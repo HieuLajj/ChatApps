@@ -1,5 +1,5 @@
 import client from './client'
-
+import * as DocumentPicker from 'expo-document-picker';
 const allMessages = async(token, id, myCallback) => {
     const config = {
         headers: {
@@ -16,7 +16,7 @@ const allMessages = async(token, id, myCallback) => {
     }
 }
 
-const sendMessage = async(token, contentSend, chatIdSend, image,video)=>{
+const sendMessage = async(token, contentSend, chatIdSend, image, video, audio, imgRaw)=>{
     const formData = new FormData();
     if (image != null){
         formData.append('imgChat',{
@@ -31,6 +31,22 @@ const sendMessage = async(token, contentSend, chatIdSend, image,video)=>{
             uri: video,
             type: 'video/mp4'
         })
+    }
+    if (audio != ""){
+        formData.append('imgAudio',{
+            name: new Date() + 'audiopost',
+            uri: audio,
+            type: 'audio/m4a'
+        })
+    }
+    console.log("hihihi"+JSON.stringify(imgRaw))
+    if (imgRaw != ""){
+        formData.append('imgRaw',{
+            name: new Date() + 'affffudiopost',
+            uri: imgRaw.uri,
+            type: imgRaw.type
+        })
+        console.log("okmedi")
     }
     formData.append('content', contentSend)
     formData.append('chatId', chatIdSend)
@@ -49,7 +65,7 @@ const sendMessage = async(token, contentSend, chatIdSend, image,video)=>{
         console.log("da gui tin nhan thanh cong");
         //return res.data   
     } catch (error) {
-        console.log(error);    
+        console.log(error+'aaaaaa');    
     }
 }
 export {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
     View,
     Text,
@@ -16,8 +16,21 @@ import Feather from 'react-native-vector-icons/Feather';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import {useDispatch,useSelector} from 'react-redux'
+import { updateUser } from '../api/api_user';
 export default function EditProfileScreen() {
     const info = useSelector((state)=>state.personalInfo)
+    const [inputs, setInputs] = useState({
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+    });
+    const handleOnChange = (text,input) => {
+      setInputs(prevState=>({...prevState,[input]:text}));
+    };
+    const handleOnChange2 = (text,input) => {
+      setInputs(prevState=>({...prevState,[input]:parseInt(text)}));
+    };
     let renderInner = () => (
         <View style={styles.panel}>
           <View style={{alignItems: 'center'}}>
@@ -113,6 +126,7 @@ export default function EditProfileScreen() {
               placeholder="Name"
               placeholderTextColor="#666666"
               autoCorrect={false}
+              onChangeText = {(text) => handleOnChange(text,'name')}
               style={[
                 styles.textInput,
                 {
@@ -128,6 +142,7 @@ export default function EditProfileScreen() {
               placeholderTextColor="#666666"
               keyboardType="number-pad"
               autoCorrect={false}
+              onChangeText = {(text) => handleOnChange(text,'phone')}
               style={[
                 styles.textInput,
                 {
@@ -142,6 +157,7 @@ export default function EditProfileScreen() {
               placeholder="Email"
               placeholderTextColor="#666666"
               keyboardType="email-address"
+              onChangeText = {(text) => handleOnChange(text,'email')}
               autoCorrect={false}
               style={[
                 styles.textInput,
@@ -151,7 +167,12 @@ export default function EditProfileScreen() {
               ]}
             />
           </View>
-          <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
+          <TouchableOpacity style={styles.commandButton} onPress={() => {
+            // console.log(inputs)
+            updateUser(info.token, inputs,()=>{
+              
+            })
+          }}>
             <Text style={styles.panelButtonTitle}>Submit</Text>
           </TouchableOpacity>
         </Animated.View>
